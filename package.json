@@ -1,0 +1,22 @@
+{
+  "name": "@wakit/events",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wakit",
+    "events"
+  ],
+  "author": "Joao Matos",
+  "license": "MIT",
+  "description": "Event system for wakit",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "^5.9.3"
+  }
+}
