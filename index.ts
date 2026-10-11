@@ -11,7 +11,7 @@ let runningId = 1
 let handlers: EventHandler[] = []
 
 const getNextId = (): string => {
-  return `custom-event-${runningId ++}`
+  return `custom-event-${runningId++}`
 }
 
 const subscribe = <T>(
@@ -39,16 +39,32 @@ const unsubscribeGroup = (group: string): void => {
   handlers = handlers.filter(handler => handler.group !== group)
 }
 
+const runHandlers = (matching: EventHandler[], event: IEvent, context: unknown): void => {
+  let failed = false
+  let firstError: unknown
+
+  matching.forEach(handler => {
+    try {
+      handler.handle(context, event)
+    } catch (error) {
+      if (! failed) {
+        failed = true
+        firstError = error
+      }
+    }
+  })
+
+  if (failed) {
+    throw firstError
+  }
+}
+
 const dispatch = (event: IEvent, context?: unknown): void => {
-  handlers
-    .filter(handler => handler.event === event)
-    .forEach(handler => handler.handle(context, event))
+  runHandlers(handlers.filter(handler => handler.event === event), event, context)
 }
 
 const dispatchFor = (event: IEvent, id: string, context?: unknown): void => {
-  handlers
-    .filter(handler => handler.event === event && handler.id === id)
-    .forEach(handler => handler.handle(context, event))
+  runHandlers(handlers.filter(handler => handler.event === event && handler.id === id), event, context)
 }
 
 export {
